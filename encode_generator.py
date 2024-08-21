@@ -2,9 +2,26 @@ import cv2
 import face_recognition
 import pickle
 from helpers import img_list_generator,user_id_generator
+import firebase_admin
+from firebase_admin import credentials , db , storage
+import os 
 
-img_list =img_list_generator("FACE_RECOGNITION\\images")
-user_ids = user_id_generator("FACE_RECOGNITION\\images")
+cred = credentials.Certificate(r"C:\Users\bedir\OneDrive\Masaüstü\YMIR\PROJECTS\PYTHON\AI\FACE_RECOGNITION\FACE_RECOGNITION\firebase_cred.json")
+firebase_admin.initialize_app(cred,{
+    "databaseURL":"https://faceattendacerealtime-d07fe-default-rtdb.firebaseio.com/",
+    "storageBucket":"faceattendacerealtime-d07fe.appspot.com"
+})
+
+img_list =img_list_generator("images")
+user_ids = user_id_generator("images")
+
+path_list = os.listdir("images")
+
+for path in path_list:
+    file_name = f"images/{path}"
+    bucket = storage.bucket()
+    blob = bucket.blob(file_name)
+    blob.upload_from_filename(file_name)
 
 def find_encodings(image_list):
     encode_list = []

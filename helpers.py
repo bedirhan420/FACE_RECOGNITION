@@ -10,3 +10,5 @@ def user_id_generator(folder_path):
     file_path = os.listdir(folder_path)
     id_list = [os.path.splitext(path)[0] for path in file_path]
     return id_list
+
+    
